@@ -1,0 +1,49 @@
+println("Please in put number ")
+input = readline()
+global items = parse(Int, input("Items?"))
+println()
+println("You inputed $items")
+
+println("Items $items")
+
+global wghts = Array{Float64}(undef, items)
+global amounts = Array{Float64}(undef, items)
+for i = 1:items
+        wghts[i] = parse(Float64, input("$i th weight?"))
+        println()
+        values[i] = parse(Float64, input("$i th value?"))
+        println()
+end
+global capacity = parse(Float64, input("Capacity?"))
+
+global set0 = zeros(Bool, items)
+
+function calcSet(set0)
+        if sum(set0.*wghts) > capacity
+                return -1.0
+        end
+        return sum(set0 .* values)
+end
+
+
+set1 = copy(set0)
+
+function process(set0)
+        done = true
+        while done
+                set1 = copy(set0)
+                for i = 1:items
+                        set2 = copy(set0)
+                        set2[i] = !set2[i]
+                        if calcSet(set2) > calcSet(set1)
+                                set1 = set2
+                        end
+                end
+                if calcSet(set1) <= calcSet(set0)
+                        done = false
+                        println(set0)
+                end
+                set0 = set1
+        end
+end
+process(set0)
